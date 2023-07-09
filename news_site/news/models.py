@@ -16,13 +16,5 @@ class Comment(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
 
 class Vote(models.Model):
-    UPVOTE = 1
-    DOWNVOTE = -1
-    VOTE_CHOICES = (
-        (UPVOTE, 'Upvote'),
-    )
-
-    value = models.SmallIntegerField(choices=VOTE_CHOICES)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, related_name='votes', on_delete=models.CASCADE)
-

@@ -45,12 +45,8 @@ class LogoutView(auth_view.LogoutView):
 @login_required
 def upvote(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    vote, created = Vote.objects.get_or_create(user=request.user, post=post)
-    if created:
-        vote.value = Vote.UPVOTE
-        vote.save()
-    else:
-        messages.info(request, "You have already voted on this post.")
+    if not Vote.objects.filter(user=request.user, post=post).exists():
+        Vote.objects.create(user=request.user, post=post)
     return redirect('post_detail', pk=post.pk)
 
 

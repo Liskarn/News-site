@@ -18,7 +18,7 @@ class CommentAdmin(admin.ModelAdmin):
 admin.site.register(Comment, CommentAdmin)
 
 class VoteAdmin(admin.ModelAdmin):
-    list_display = ['user', 'post', 'value']
-    list_filter = ['value']
+    list_display = ('user', 'post')
+    list_filter = ('user', 'post')
 
 admin.site.register(Vote, VoteAdmin)
