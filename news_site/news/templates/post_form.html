@@ -1,7 +1,6 @@
-{% extends "news/base.html" %}
+{% extends "base.html" %}
 
 {% block content %}
-{% csrf_token %}
   <h1>New Post</h1>
   <form method="POST">
     {% csrf_token %}

@@ -1,8 +1,6 @@
 from django.urls import path
 from . import views
-from django.contrib.auth import views as auth_views
-from django.contrib.auth.views import LoginView
-from django.contrib.auth.views import LogoutView
+from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
     path('', views.post_list, name='post_list'),  # List of posts
@@ -13,5 +11,6 @@ urlpatterns = [
     path('register/', views.register, name='register'),  # User registration
     path('post/<int:pk>/upvote/', views.upvote, name='upvote'),
     path('post/<int:pk>/downvote/', views.downvote, name='downvote'),
-    
+    path('post/<int:pk>/comment/', views.add_comment, name='add_comment'),
+    path('comment/<int:pk>/delete/', views.delete_comment, name='delete_comment'),
 ]

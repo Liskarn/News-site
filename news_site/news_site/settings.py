@@ -11,22 +11,26 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+from pathlib import Path
+import dj_database_url
+if os.path.isfile("env.py"):
+    import env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-@y_(p=_2yj84+tt_f($q^+8*j=d7)ug*q+rpn$ncqsr3c1asof'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [ '8000-liskarn-newssite-ov17r88m4mi.ws-eu101.gitpod.io']
-
+ALLOWED_HOSTS = [".herokuapp.com", "localhost", '8000-liskarn-newssite-ov17r88m4mi.ws-eu101.gitpod.io',]
 
 # Application definition
 
@@ -40,6 +44,7 @@ INSTALLED_APPS = [
     'news',
 ]
 
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -51,6 +56,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'news_site.urls'
+LOGIN_URL = 'login'
 
 TEMPLATES = [
     {
@@ -81,10 +87,8 @@ WSGI_APPLICATION = 'news_site.wsgi.application'
 #     }
 # }
 
-import dj_database_url
-
 DATABASES = {
-    'default': dj_database_url.config(default='postgres://obefwbdj:cJhou8Qi0MKpiPQJ32Jf0E2naXB_Oqin@snuffleupagus.db.elephantsql.com/obefwbdj')
+    'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
 }
 
 
@@ -123,6 +127,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
