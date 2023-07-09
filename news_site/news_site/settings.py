@@ -30,7 +30,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = [".herokuapp.com", "localhost", '8000-liskarn-newssite-ov17r88m4mi.ws-eu101.gitpod.io',]
+ALLOWED_HOSTS = [ "localhost", '8000-liskarn-newssite-ov17r88m4mi.ws-eu101.gitpod.io', '*']
 
 # Application definition
 
@@ -41,9 +41,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_summernote',
     'news',
 ]
 
+CSRF_TRUSTED_ORIGINS = ['https://8000-liskarn-newssite-ov17r88m4mi.ws-eu101.gitpod.io']
+
+LOGIN_REDIRECT_URL = 'post_list'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
