@@ -1,5 +1,7 @@
 from django.contrib import admin
 from .models import Post, Comment
+from .models import Vote
+
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ['title', 'link', 'description', 'pub_date', 'author']
@@ -14,3 +16,9 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ['created_date', 'author']
 
 admin.site.register(Comment, CommentAdmin)
+
+class VoteAdmin(admin.ModelAdmin):
+    list_display = ['user', 'post', 'value']
+    list_filter = ['value']
+
+admin.site.register(Vote, VoteAdmin)

@@ -20,7 +20,6 @@ class Vote(models.Model):
     DOWNVOTE = -1
     VOTE_CHOICES = (
         (UPVOTE, 'Upvote'),
-        (DOWNVOTE, 'Downvote'),
     )
 
     value = models.SmallIntegerField(choices=VOTE_CHOICES)
