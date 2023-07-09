@@ -41,8 +41,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'widget_tweaks',
+    'crispy_forms',
     'news',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 CSRF_TRUSTED_ORIGINS = ['https://8000-liskarn-newssite-ov17r88m4mi.ws-eu101.gitpod.io']
 

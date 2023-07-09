@@ -1,10 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>New Post</h1>
-  <form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+  <div class="container">
+    <h2>Edit Post</h2>
+    <form method="post">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="form-group">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          <input type="{{ field.field.widget.input_type }}" name="{{ field.html_name }}" class="form-control" id="{{ field.auto_id }}" {% if field.field.required %}required{% endif %}>
+          {% if field.help_text %}
+            <small class="form-text text-muted">{{ field.help_text }}</small>
+          {% endif %}
+          {% for error in field.errors %}
+            <div class="alert alert-danger">{{ error }}</div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+  </div>
 {% endblock %}

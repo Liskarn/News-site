@@ -15,7 +15,7 @@ from django.contrib import messages
 def post_list(request):
     posts = Post.objects.all()
     for post in posts:
-        post.upvotes = Vote.objects.filter(post=post, value=Vote.UPVOTE).count()
+        post.upvotes = post.votes.filter(value=1).count()
     return render(request, 'post_list.html', {'posts': posts})
 
 def post_detail(request, pk):
@@ -37,6 +37,7 @@ def register(request):
 
 class LoginView(auth_view.LoginView):
     template_name = 'login.html'
+    next_page = 'get_success_url'
 
 class LogoutView(auth_view.LogoutView):
     next_page = reverse_lazy('post_list.html')
@@ -46,7 +47,7 @@ class LogoutView(auth_view.LogoutView):
 def upvote(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if not Vote.objects.filter(user=request.user, post=post).exists():
-        Vote.objects.create(user=request.user, post=post)
+        Vote.objects.create(value=1, user=request.user, post=post)
     return redirect('post_detail', pk=post.pk)
 
 
