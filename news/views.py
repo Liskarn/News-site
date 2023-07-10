@@ -2,13 +2,14 @@ from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.decorators import login_required
-from .models import Post, Vote
+from .models import Post, Vote, Comment
 from .forms import PostForm, CommentForm
 from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import views as auth_view
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django import forms
 
 
 
@@ -17,6 +18,7 @@ def post_list(request):
     for post in posts:
         post.upvotes = post.votes.filter(value=1).count()
     return render(request, 'post_list.html', {'posts': posts})
+
 
 def post_detail(request, pk):
     post = Post.objects.get(id=pk)
@@ -35,25 +37,27 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'register.html', {'form': form})
 
+
 class LoginView(auth_view.LoginView):
     template_name = 'login.html'
-    next_page = 'get_success_url'
+    next_page = 'post_list'
+
 
 class LogoutView(auth_view.LogoutView):
-    next_page = reverse_lazy('post_list.html')
+    next_page = 'post_list'
 
 
 @login_required
 def upvote(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if not Vote.objects.filter(user=request.user, post=post).exists():
-        Vote.objects.create(value=1, user=request.user, post=post)
+        Vote.objects.create(value=Vote.UPVOTE, user=request.user, post=post)
     return redirect('post_detail', pk=post.pk)
 
 
-@login_required
-def add_comment(request, pk):
+def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
+    upvotes = post.votes.filter(value=Vote.UPVOTE).count()
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -64,7 +68,7 @@ def add_comment(request, pk):
             return redirect('post_detail', pk=post.pk)
     else:
         form = CommentForm()
-    return render(request, 'add_comment.html', {'form': form})
+    return render(request, 'post_detail.html', {'post': post, 'upvotes': upvotes, 'form': form})
 
 
 @login_required
@@ -74,6 +78,7 @@ def delete_comment(request, pk):
     if request.user == comment.author:
         comment.delete()
     return redirect('post_detail', pk=post_pk)
+
 
 @login_required
 def post_new(request):
@@ -87,6 +92,7 @@ def post_new(request):
     else:
         form = PostForm()
     return render(request, 'post_edit.html', {'form': form})
+
 
 @login_required
 def post_edit(request, pk):

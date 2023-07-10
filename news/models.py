@@ -21,6 +21,6 @@ class Vote(models.Model):
         (UPVOTE, 'Upvote'),
     )
 
-    value = models.IntegerField(default=0)
+    value = models.SmallIntegerField(choices=VOTE_CHOICES, default=UPVOTE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, related_name='votes', on_delete=models.CASCADE)
