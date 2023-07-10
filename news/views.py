@@ -91,7 +91,7 @@ def post_new(request):
             return redirect('post_detail', pk=post.pk)
     else:
         form = PostForm()
-    return render(request, 'post_edit.html', {'form': form})
+    return render(request, 'post_edit.html', {'form': form, 'is_new': True})
 
 
 @login_required
@@ -109,5 +109,6 @@ def post_edit(request, pk):
             return redirect('post_detail', pk=post.pk)
     else:
         form = PostForm(instance=post)
-    return render(request, 'post_edit.html', {'form': form})
+    return render(request, 'post_edit.html', {'form': form, 'is_new': False})
+
 
